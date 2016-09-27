@@ -12,7 +12,6 @@
         <scala.version>2.11.7</scala.version>
         <jackson.scala.version>2.7.2</jackson.scala.version>
         <porch.dropwizard.version>0.1.136</porch.dropwizard.version>
-        <porch.commons.version>2.1537.0</porch.commons.version>
     </properties>
 
     <dependencies>
@@ -36,33 +35,6 @@
             <version>${jackson.scala.version}</version>
         </dependency>
 
-        <!-- Commons -->
-        <dependency>
-            <groupId>com.porch.commons</groupId>
-            <artifactId>porch-commons-api-response</artifactId>
-            <version>${porch.commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch.commons</groupId>
-            <artifactId>porch-commons-scala-api-response</artifactId>
-            <version>${porch.commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch.commons</groupId>
-            <artifactId>porch-commons-service-scala</artifactId>
-            <version>${porch.commons.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.jersey</groupId>
-                    <artifactId>jersey-client</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.porch.commons</groupId>
-            <artifactId>porch-commons-util</artifactId>
-            <version>${porch.commons.version}</version>
-        </dependency>
 
         <!-- DW Modules -->
         <dependency>
@@ -73,47 +45,6 @@
         <dependency>
             <groupId>com.porch</groupId>
             <artifactId>dropwizard-1.0.x-core</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-jackson</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-logstash</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-newrelic</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-scala-client</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-scala-service</artifactId>
-            <version>${porch.dropwizard.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-swagger</artifactId>
-            <version>${porch.dropwizard.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.porch</groupId>
-            <artifactId>dropwizard-1.0.x-validation</artifactId>
             <version>${porch.dropwizard.version}</version>
         </dependency>
 
