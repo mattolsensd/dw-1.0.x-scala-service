@@ -10,7 +10,7 @@
 
     <properties>
         <scala.version>2.11.7</scala.version>
-        <jackson.scala.version>2.7.2</jackson.scala.version>
+        <jackson.version>2.7.6</jackson.version>
         <porch.dropwizard.version>0.1.136</porch.dropwizard.version>
         <porch.commons.version>2.1537.0</porch.commons.version>
     </properties>
@@ -23,17 +23,12 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-reflect</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
 
         <!-- Jackson -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-scala_2.11</artifactId>
-            <version>${jackson.scala.version}</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Commons -->
@@ -62,6 +57,12 @@
             <groupId>com.porch.commons</groupId>
             <artifactId>porch-commons-util</artifactId>
             <version>${porch.commons.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- DW Modules -->
@@ -121,15 +122,6 @@
 
     <build>
 
-        <!--<resources>-->
-            <!--<resource>-->
-                <!--<directory>src/main/resources</directory>-->
-                <!--<includes>-->
-                    <!--<include>**/*.lua</include>-->
-                <!--</includes>-->
-            <!--</resource>-->
-        <!--</resources>-->
-
         <plugins>
 
             <plugin>
@@ -157,16 +149,6 @@
                     <scalaVersion>${scala.version}</scalaVersion>
                 </configuration>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<version>3.5.1</version>-->
-                <!--<configuration>-->
-                    <!--<source>1.8</source>-->
-                    <!--<target>1.8</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -201,12 +183,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-jar-plugin</artifactId>-->
-                <!--<version>3.0.2</version>-->
-            <!--</plugin>-->
 
         </plugins>
     </build>
