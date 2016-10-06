@@ -15,10 +15,3 @@ config.server = {
     },
     registerDefaultExceptionMappers = false
 }
-
-config.jerseyClient = {
-    timeout = "15s",
-    connectionTimeout = "5s",
-    maxThreads = 500,
-    workQueueSize = 40
-}
