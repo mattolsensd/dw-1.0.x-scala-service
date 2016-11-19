@@ -1,5 +1,6 @@
 package molsen.dw
 
+import javax.ws.rs.container.{AsyncResponse, Suspended}
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.{WebApplicationException, _}
 
@@ -24,6 +25,8 @@ class FuturesResource extends AsyncResource {
 
   private val LOG: Logger = LoggerFactory.getLogger(classOf[FuturesResource])
 
+  // Block with Await.result
+
   @GET
   @Path("await/success")
   def testAwaitSuccess(): ApiResponse[String] = {
@@ -36,6 +39,8 @@ class FuturesResource extends AsyncResource {
     ApiResponse.ok(Await.result(Future.failed(new WebApplicationException("BOOM")), defaultTimeout))
   }
 
+  // Block with AsyncResource.synchronous
+
   @GET
   @Path("sync/success")
   def testSyncSuccess() = synchronous[ApiResponse[String]] {
@@ -47,6 +52,22 @@ class FuturesResource extends AsyncResource {
   def testSyncFailure() = synchronous[ApiResponse[String]] {
     Future.failed(new WebApplicationException("BOOM"))
   }
+
+  // Return async with AsyncResource.async
+
+  @GET
+  @Path("async/success")
+  def testAsyncSuccess()(implicit @Suspended response: AsyncResponse) = async[ApiResponse[String]] {
+    Future.apply(ApiResponse.ok("Hello World"))
+  }
+
+  @GET
+  @Path("async/failure")
+  def testAsyncFailure()(implicit @Suspended response: AsyncResponse) = async[ApiResponse[String]] {
+    Future.failed(new WebApplicationException("BOOM"))
+  }
+
+  // Error Handling
 
   @GET
   @Path("for-comprehension/success")
