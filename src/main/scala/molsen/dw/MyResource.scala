@@ -1,14 +1,12 @@
 package molsen.dw
 
 import javax.ws.rs._
-import javax.ws.rs.container.{AsyncResponse, Suspended}
 import javax.ws.rs.core.{MediaType, Response}
 
 import com.porch.commons.response.{ApiError, ApiResponse, ValidationError}
 import com.porch.dropwizard.scala.service.AsyncResource
 
 import scala.collection.JavaConverters._
-import scala.concurrent.Future
 
 
 // TEST API RESPONSES, EXCEPTION MAPPING, AND RESPONSE STATUS CODES
@@ -29,8 +27,6 @@ import scala.concurrent.Future
 @Produces(Array(MediaType.APPLICATION_JSON))
 class MyResource extends AsyncResource {
 
-  import scala.concurrent.ExecutionContext.Implicits.global
-
   val validationErrors = Seq(new ValidationError("id", "id is required"), new ValidationError("name", "That's a crap name"))
 
   // SUCCEED
@@ -42,18 +38,6 @@ class MyResource extends AsyncResource {
   @GET
   @Path("success/dto")
   def respondWithDto(): ApiResponse[MyDTO] = ApiResponse.ok(MyDTO(1L, "Thing1"))
-
-  @GET
-  @Path("success/future/dto/sync")
-  def respondWithFutureDto() = synchronous[ApiResponse[MyDTO]] {
-    Future.apply(ApiResponse.ok(MyDTO(1L, "Thing1")))
-  }
-
-  @GET
-  @Path("success/future/dto/async")
-  def respondWithAsyncFutureDto()(implicit @Suspended response: AsyncResponse) = async[ApiResponse[MyDTO]] {
-    Future.apply(ApiResponse.ok(MyDTO(1L, "Thing1")))
-  }
 
   // FAIL
 
