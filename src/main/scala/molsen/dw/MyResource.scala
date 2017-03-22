@@ -10,6 +10,20 @@ import com.porch.dropwizard.scala.service.AsyncResource
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
+
+// TEST API RESPONSES, EXCEPTION MAPPING, AND RESPONSE STATUS CODES
+
+// TLDR: Throw WAEs that map to failed ApiResponses; Never return a failed ApiResponse directly
+
+// If DefaultExceptionMappingBundle is added, throwing any Exception that extends WAE will be mapped to an ApiResponse
+// and the response status code will be whatever was specified in the WAE
+
+// Returning a failed ApiResponse will result in a 200 status code (just like returning any other value)
+// If, for some reason, you want to return a failure response directly, with proper status code, you can do something like:
+// Response.status(Response.Status.BAD_REQUEST).entity(ApiResponse.failed(ApiError.BAD_REQUEST, "The request was bad")).build()
+// There's no reason to do this if our exception mappers are registered
+
+
 @Path("test")
 @Consumes(Array(MediaType.APPLICATION_JSON))
 @Produces(Array(MediaType.APPLICATION_JSON))
