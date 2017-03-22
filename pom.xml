@@ -13,6 +13,11 @@
         <jackson.version>2.7.6</jackson.version>
         <porch.dropwizard.version>0.1.136</porch.dropwizard.version>
         <porch.commons.version>2.1537.0</porch.commons.version>
+
+        <!-- TEST -->
+        <scalamock-scalatest-support_2.11.version>3.2</scalamock-scalatest-support_2.11.version>
+        <scalatest_2.11.version>2.2.6</scalatest_2.11.version>
+        <mockito-core.version>2.0.43-beta</mockito-core.version>
     </properties>
 
     <dependencies>
@@ -118,6 +123,25 @@
             <version>${porch.dropwizard.version}</version>
         </dependency>
 
+        <!-- Test -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <version>${scalatest_2.11.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scalamock</groupId>
+            <artifactId>scalamock-scalatest-support_2.11</artifactId>
+            <version>${scalamock-scalatest-support_2.11.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
