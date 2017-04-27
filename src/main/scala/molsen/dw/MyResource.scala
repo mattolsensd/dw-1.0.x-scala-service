@@ -31,108 +31,117 @@ class MyResource extends AsyncResource {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  val validationErrors = Seq(new ValidationError("id", "id is required"), new ValidationError("name", "That's a crap name"))
 
   // SUCCEED
 
   @GET
   @Path("success/string")
-  def respondWithString(): ApiResponse[String] = ApiResponse.ok("Hello Test")
+  def respondWithString(): ApiResponse[String] = ApiResponse.ok(MyResource.MY_STRING)
 
   @GET
   @Path("success/dto")
-  def respondWithDto(): ApiResponse[MyDTO] = ApiResponse.ok(MyDTO(1L, "Thing1"))
+  def respondWithDto(): ApiResponse[MyDTO] = ApiResponse.ok(MyResource.MY_DTO)
 
   @GET
   @Path("success/future/dto/sync")
-  def respondWithFutureDto() = synchronous[ApiResponse[MyDTO]] {
-    Future.apply(ApiResponse.ok(MyDTO(1L, "Thing1")))
+  def respondWithFutureDto(): ApiResponse[MyDTO] = synchronous[ApiResponse[MyDTO]] {
+    Future.apply(ApiResponse.ok(MyResource.MY_DTO))
   }
 
   @GET
   @Path("success/future/dto/async")
-  def respondWithAsyncFutureDto()(implicit @Suspended response: AsyncResponse) = async[ApiResponse[MyDTO]] {
-    Future.apply(ApiResponse.ok(MyDTO(1L, "Thing1")))
+  def respondWithAsyncFutureDto()(implicit @Suspended response: AsyncResponse): Unit = async[ApiResponse[MyDTO]] {
+    Future.apply(ApiResponse.ok(MyResource.MY_DTO))
   }
 
   // FAIL
 
   @GET
   @Path("failure/bad-request")
-  def respondBadRequest(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.BAD_REQUEST)
+  def respondBadRequest(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.BAD_REQUEST, MyResource.MY_BAD_REQUEST_MESSAGE)
 
   @GET
   @Path("failure/conflict")
-  def respondConflict(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.CONFLICT)
+  def respondConflict(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.CONFLICT, MyResource.MY_CONFLICT_MESSAGE)
 
   @GET
   @Path("failure/forbidden")
-  def respondForbidden(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.FORBIDDEN)
+  def respondForbidden(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.FORBIDDEN, MyResource.MY_FORBIDDEN_MESSAGE)
 
   @GET
   @Path("failure/not-found")
-  def respondNotFound(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.NOT_FOUND)
+  def respondNotFound(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.NOT_FOUND, MyResource.MY_NOT_FOUND_MESSAGE)
 
   @GET
   @Path("failure/unauthorized")
-  def respondUnauthorized(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.UNAUTHORIZED)
+  def respondUnauthorized(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.UNAUTHORIZED, MyResource.MY_UNAUTHORIZED_MESSAGE)
 
   @GET
   @Path("failure/validation-error")
-  def respondBadRequestWithMessage(): ApiResponse[MyDTO] = ApiResponse.failed(new ApiError(ApiError.BAD_REQUEST, "Validation failed", validationErrors.toList.asJava))
+  def respondValidationError(): ApiResponse[MyDTO] = ApiResponse.failed(new ApiError(MyResource.MY_VALIDATION_ERRORS.toList.asJava))
+
+  @GET
+  @Path("failure/validation-error-with-custom-message")
+  def respondValidationErrorWithCustomMessage(): ApiResponse[MyDTO] = ApiResponse.failed(new ApiError(ApiError.VALIDATION_ERROR, MyResource.MY_VALIDATION_ERROR_MESSAGE, MyResource.MY_VALIDATION_ERRORS.toList.asJava))
 
   @GET
   @Path("failure/ise")
-  def responseISE(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.SERVER_ERROR)
+  def respondISE(): ApiResponse[MyDTO] = ApiResponse.failed(ApiError.SERVER_ERROR, MyResource.MY_ISE_MESSAGE)
 
   // THROW
 
   @GET
   @Path("throw/bad-request")
   def throwBadRequest(): ApiResponse[MyDTO] = {
-    throw new BadRequestException("That didn't make sense")
+    throw new BadRequestException(MyResource.MY_BAD_REQUEST_MESSAGE)
   }
 
   @GET
   @Path("throw/conflict")
   def throwConflict(): ApiResponse[MyDTO] = {
-    throw new WebApplicationException("OMG CONFLICT!", Response.Status.CONFLICT)
+    throw new WebApplicationException(MyResource.MY_CONFLICT_MESSAGE, Response.Status.CONFLICT)
   }
 
   @GET
   @Path("throw/forbidden")
   def throwForbidden(): ApiResponse[MyDTO] = {
-    throw new ForbiddenException("You can't have that")
+    throw new ForbiddenException(MyResource.MY_FORBIDDEN_MESSAGE)
   }
 
   @GET
   @Path("throw/not-found")
   def throwNotFound(): ApiResponse[MyDTO] = {
-    throw new NotFoundException("I didn't find it")
+    throw new NotFoundException(MyResource.MY_NOT_FOUND_MESSAGE)
   }
 
   @GET
   @Path("throw/unauthroized")
   def throwUnauthorized(): ApiResponse[MyDTO] = {
-    throw new WebApplicationException("Who are you?", Response.Status.UNAUTHORIZED)
+    throw new WebApplicationException(MyResource.MY_UNAUTHORIZED_MESSAGE, Response.Status.UNAUTHORIZED)
   }
 
   @GET
   @Path("throw/validation-error")
   def throwValidationError(): ApiResponse[MyDTO] = {
-    throw new BadRequestException(s"One of your things has the wrong thing:\n\n${validationErrors.map(e => e.getMessage).mkString("\n")}")
+    throw new MyValidationException(MyResource.MY_VALIDATION_ERRORS)
+  }
+
+  @GET
+  @Path("throw/validation-error-with-custom-message")
+  def throwValidationErrorWithCustomMessage(): ApiResponse[MyDTO] = {
+    throw new MyValidationException(MyResource.MY_VALIDATION_ERRORS, Some(MyResource.MY_VALIDATION_ERROR_MESSAGE))
   }
 
   @GET
   @Path("throw/ise")
   def throwISE(): ApiResponse[MyDTO] = {
-    throw new InternalServerErrorException("EXPLODE!")
+    throw new InternalServerErrorException(MyResource.MY_ISE_MESSAGE)
   }
 
   @GET
   @Path("throw/wae")
   def throwWAE(): ApiResponse[MyDTO] = {
-    throw new WebApplicationException("EXPLODE!")
+    throw new WebApplicationException(MyResource.MY_WAE_MESSAGE)
   }
 
   // BREAK
@@ -144,6 +153,27 @@ class MyResource extends AsyncResource {
     ApiResponse.ok(MyDTO(myDto.id, myDto.name))
   }
 
+}
+
+object MyResource {
+  val MY_STRING: String = "Hello Test"
+
+  val MY_DTO: MyDTO = MyDTO(1L, "Thing1")
+
+  val MY_BAD_REQUEST_MESSAGE: String = "The server cannot or will not process the request due to an apparent client error (e.g., malformed request syntax, too large size, invalid request message framing, or deceptive request routing)."
+  val MY_CONFLICT_MESSAGE: String = "Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates."
+  val MY_FORBIDDEN_MESSAGE: String = "The request was valid, but the server is refusing action. The user might not have the necessary permissions for a resource."
+  val MY_NOT_FOUND_MESSAGE: String = "The requested resource could not be found but may be available in the future. Subsequent requests by the client are permissible."
+  val MY_UNAUTHORIZED_MESSAGE: String = "Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided."
+  val MY_ISE_MESSAGE: String = "A generic error message, given when an unexpected condition was encountered and no more specific message is suitable."
+  val MY_WAE_MESSAGE: String = "Throwing a WebApplicationException will also result in a server error response"
+
+  // Validation Errors are a special form of badRequest response
+  val MY_VALIDATION_ERROR_MESSAGE: String = "Request validation failed"
+
+  val MY_VALIDATION_ERRORS = Seq(new ValidationError("id", "id is required"), new ValidationError("name", "That's a crap name"))
+
+  val LOGGING_EXCEPTION_MAPPER_MESSAGE = "There was an error processing your request. It has been logged"
 }
 
 case class MyDTO
