@@ -1,5 +1,6 @@
 package molsen.dw
 
+import java.net.URI
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
 
@@ -16,5 +17,10 @@ class MyConfig extends Configuration {
   @NotNull
   @JsonProperty("jerseyClient")
   var jerseyClient: JerseyClientConfiguration = _
+
+  @Valid
+  @NotNull
+  @JsonProperty("partnerDataUrl")
+  var partnerDataUrl: URI = _
 
 }

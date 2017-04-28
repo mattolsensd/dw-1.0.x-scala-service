@@ -118,6 +118,13 @@
             <version>${porch.dropwizard.version}</version>
         </dependency>
 
+        <!-- Client -->
+        <dependency>
+            <groupId>com.porch.partnerproject</groupId>
+            <artifactId>partner-data-client</artifactId>
+            <version>develop-SNAPSHOT</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>com.porch</groupId>

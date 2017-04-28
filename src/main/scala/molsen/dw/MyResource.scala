@@ -6,6 +6,7 @@ import javax.ws.rs.core.{MediaType, Response}
 
 import com.porch.commons.response.{ApiError, ApiResponse, ValidationError}
 import com.porch.dropwizard.scala.service.AsyncResource
+import com.porch.partner.auth.{Secure, SecurePartnerDTO}
 
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
@@ -31,6 +32,10 @@ class MyResource extends AsyncResource {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
+
+  @GET
+  @Path("auth")
+  def secureEndpoint(@Secure partner: SecurePartnerDTO): ApiResponse[SecurePartnerDTO] = ApiResponse.ok(partner)
 
   // SUCCEED
 

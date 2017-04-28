@@ -22,3 +22,5 @@ config.jerseyClient = {
     maxThreads = 500,
     workQueueSize = 40
 }
+
+config.partnerDataUrl = "http://localhost:9456"
