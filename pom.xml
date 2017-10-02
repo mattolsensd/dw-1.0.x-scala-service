@@ -68,6 +68,11 @@
         <!-- DW Modules -->
         <dependency>
             <groupId>com.porch</groupId>
+            <artifactId>dropwizard-1.0.x-auth</artifactId>
+            <version>${porch.dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.porch</groupId>
             <artifactId>dropwizard-1.0.x-configuration-modular-lua</artifactId>
             <version>${porch.dropwizard.version}</version>
         </dependency>
